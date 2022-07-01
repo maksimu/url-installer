@@ -2,11 +2,12 @@
 
 set -e;
 
+ql_magenta='\033[1;35m'
 ql_green='\033[1;32m'
 ql_no_color='\033[0m'
 
 
-read -p "This script will install KSM silently on your macos Are you sure? [y/N] " -n 1 -r
+read -p "${ql_green}This script will install KSM silently on your macOS. ${ql_magenta}Are you sure? [y/N] ${ql_no_color}" -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
