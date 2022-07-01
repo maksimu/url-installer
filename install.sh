@@ -35,17 +35,14 @@ curl -H 'Cache-Control: no-cache' \
  --silent
 
 
-echo "";
 echo -e "📦${ql_green} => KSM CLI download succeeded to $downloaddir.${ql_no_color}";
-echo "";
 
 sudo installer -verbose -pkg "$downloaddir" -target /
 
 
 # Cleanup
-echo -e "🚜${ql_green} => Cleaning up${ql_no_color}"
+echo -e "🚜${ql_green} => Cleaning up temp files...${ql_no_color}"
 rm -rf "$HOME/.keeper-gateway"
 
-echo "";
 echo -e "🚀${ql_green} => KSM was installed successfully.${ql_no_color}";
 echo "";
