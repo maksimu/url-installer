@@ -7,7 +7,7 @@ ql_green='\033[1;32m'
 ql_no_color='\033[0m'
 
 
-read -p "$(echo -e "${ql_green}"This script will install KSM silently on your macOS. "${ql_magenta}"Are you sure? [y/N] "${ql_no_color}")" -n 1 -r
+read -p "$(echo -e "${ql_green}"This script will install KSM silently on your macOS. "${ql_magenta}"👌 . Are you sure? [y/N] "${ql_no_color}")" -n 1 -r
 echo    # (optional) move to a new line
 if [[ ! $REPLY =~ ^[Yy]$ ]]
 then
@@ -15,7 +15,7 @@ then
 fi
 
 if [[ $OSTYPE != 'darwin'* ]]; then
-  echo 'Not macOS. Script is only working on macOS.'
+  echo '💔 Not macOS. This script only works on macOS.'
   exit 1
 fi
 
@@ -33,11 +33,16 @@ curl -H 'Cache-Control: no-cache' \
 
 
 echo "";
-echo -e "${ql_green} => KSM CLI download succeeded to $downloaddir.${ql_no_color}";
+echo -e "⛴${ql_green} => KSM CLI download succeeded to $downloaddir.${ql_no_color}";
 echo "";
 
-sudo installer -verbose -pkg $downloaddir -target /
+sudo installer -verbose -pkg "$downloaddir" -target /
+
+
+# Cleanup
+echo -e "🚜${ql_green} => Cleaning up${ql_no_color}"
+rm -rf "$HOME/.keeper-gateway"
 
 echo "";
-echo -e "${ql_green} => KSM was installed successfully.";
+echo -e "🚀${ql_green} => KSM was installed successfully.${ql_no_color}";
 echo "";
