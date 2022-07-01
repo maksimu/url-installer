@@ -8,7 +8,7 @@ ql_no_color='\033[0m'
 
 ONE_TIME_TOKEN="${1}"
 
-echo "🎟=> ONE TIME TOKEN=[${ql_green}${ONE_TIME_TOKEN}${ql_no_color}]"
+echo -e "🎟 => ONE TIME TOKEN=[${ql_green}${ONE_TIME_TOKEN}${ql_no_color}]"
 
 read -p "$(echo -e "${ql_green}"👌 This script will install KSM silently on your macOS. "${ql_magenta}" Are you sure? [y/N] "${ql_no_color}")" -n 1 -r
 echo    # (optional) move to a new line
