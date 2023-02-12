@@ -2,15 +2,15 @@
 
 # Colors
 ESC="\033["
-F_DEFAULT="${ESC}0;39m"
+
+F_DEFAULT="${ESC}0;37m"   # Default white color
 F_RED="${ESC}0;31m"
 F_GREEN="${ESC}0;32m"
-B_DEFAULT="${ESC}1;39m"
+
+# BOLD
+B_DEFAULT="${ESC}1;37m"   # Default BOLD white color
 B_RED="${ESC}1;31m"
 B_BLUE="${ESC}1;34m"
-
-
-
 
 
 PROG_NAME="Keeper Gateway"
@@ -86,4 +86,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT};${B_LIGHT_BLUE} $use_cmd ${B_DEFAULT};${F_GREEN} command now.${F_DEFAULT}"
+echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT}${B_LIGHT_BLUE} $use_cmd ${B_DEFAULT};${F_GREEN} command now.${F_DEFAULT}"
