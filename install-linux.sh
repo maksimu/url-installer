@@ -40,7 +40,7 @@ if [ $? != 0 ] ; then
 fi
 
 
-echo -e "\n🦈 ${B_BLUE} Started to download $PROG_NAME ${F_DEFAULT}"
+echo -e "\n🦈 ${B_BLUE}Started to download $PROG_NAME ${F_DEFAULT}"
 
 
 if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
