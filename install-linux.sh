@@ -2,9 +2,9 @@
 
 # Colors
 ESC="\033["
-F_DEFAULT="0;39m"
-F_RED="0;31m"
-F_GREEN="0;32m"
+F_DEFAULT="${ESC}0;39m"
+F_RED="${ESC}0;31m"
+F_GREEN="${ESC}0;32m"
 F_YELLOW=33
 B_DEFAULT=49
 B_RED=41
