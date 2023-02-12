@@ -11,6 +11,7 @@ ESC="\033["
 F_DEFAULT="${ESC}0;37m"   # Default white color
 F_RED="${ESC}0;31m"
 F_GREEN="${ESC}0;32m"
+F_BLUE="${ESC}0;34m"
 
 # BOLD
 B_DEFAULT="${ESC}1;37m"   # Default BOLD white color
@@ -92,4 +93,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_LIGHT_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
+echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
