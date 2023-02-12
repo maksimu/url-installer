@@ -34,25 +34,25 @@ fi
 echo $SUPPORTED_PAIRS | grep -w -q "${OS}_${ARCH}"
 
 if [ $? != 0 ] ; then
-	echo "\n${ESC}${F_RED}🛑 Unsupported OS \"$OS\" or architecture \"$ARCH\". Failed to install $PROG_NAME.${ESC}${F_DEFAULT}"
-    echo "${ESC}${B_RED}mPlease report 🐛 to $REPO/issues${ESC}${F_DEFAULT}"
+	echo -e "\n${ESC}${F_RED}🛑 Unsupported OS \"$OS\" or architecture \"$ARCH\". Failed to install $PROG_NAME.${ESC}${F_DEFAULT}"
+    echo -e "${ESC}${B_RED}mPlease report 🐛 to $REPO/issues${ESC}${F_DEFAULT}"
 	exit 1
 fi
 
 
-echo "\n🦈 ${ESC}${F_DEFAULT};${B_BLUE}m Started to download $PROG_NAME ${ESC}${B_DEFAULT};${F_DEFAULT}"
+echo -e "\n🦈 ${ESC}${F_DEFAULT};${B_BLUE}m Started to download $PROG_NAME ${ESC}${B_DEFAULT};${F_DEFAULT}"
 
 
 if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
     chmod +x $PWD/$EXE_NAME
-    echo "\n${ESC}${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${ESC}${F_DEFAULT}"
+    echo -e "\n${ESC}${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${ESC}${F_DEFAULT}"
 else
-    echo "\n${ESC}${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
+    echo -e "\n${ESC}${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
   ⚠️  Check your internet connection.\n\
   ⚠️  Make sure 'curl' command is available.\n\
   ⚠️  Make sure there is no directory named '${EXE_NAME}' in ${PWD}\n\
 ${ESC}${F_DEFAULT}"
-    echo "${ESC}${B_RED}mPlease report 🐛 to sm@keepersecurity.com${ESC}${F_DEFAULT}"
+    echo -e "${ESC}${B_RED}mPlease report 🐛 to sm@keepersecurity.com${ESC}${F_DEFAULT}"
     exit 1
 fi
 
@@ -63,7 +63,7 @@ stty raw -echo ; answer=$(head -c 1) ; stty $old_stty_cfg
 if echo "$answer" | grep -iq "^y" ;then
     echo "$answer"
     sudo mv ./$EXE_NAME $INSTALL_PATH || exit 1
-    echo "${ESC}${F_GREEN}$PROG_NAME is installed into $INSTALL_PATH${ESC}${F_DEFAULT}\n"
+    echo -e "${ESC}${F_GREEN}$PROG_NAME is installed into $INSTALL_PATH${ESC}${F_DEFAULT}\n"
 
 	ls $ALIAS_PATH >> /dev/null 2>&1
 	if [ $? != 0 ] ; then
@@ -86,4 +86,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo "${ESC}${F_GREEN}✅ You can use the ${ESC}${F_DEFAULT};${B_LIGHT_BLUE}m $use_cmd ${ESC}${B_DEFAULT};${F_GREEN} command now.${ESC}${F_DEFAULT}m"
+echo -e "${ESC}${F_GREEN}✅ You can use the ${ESC}${F_DEFAULT};${B_LIGHT_BLUE}m $use_cmd ${ESC}${B_DEFAULT};${F_GREEN} command now.${ESC}${F_DEFAULT}m"
