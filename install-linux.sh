@@ -2,9 +2,9 @@
 
 # Colors
 ESC="\033["
-F_DEFAULT='${ESC}0;39m'
-F_RED='${ESC}0;31m'
-F_GREEN='${ESC}0;32m'
+F_DEFAULT="0;39m"
+F_RED="0;31m"
+F_GREEN="0;32m"
 F_YELLOW=33
 B_DEFAULT=49
 B_RED=41
@@ -34,25 +34,25 @@ fi
 echo $SUPPORTED_PAIRS | grep -w -q "${OS}_${ARCH}"
 
 if [ $? != 0 ] ; then
-	echo -e "\n${ESC}${F_RED}🛑 Unsupported OS \"$OS\" or architecture \"$ARCH\". Failed to install $PROG_NAME.${ESC}${F_DEFAULT}"
-    echo -e "${ESC}${B_RED}mPlease report 🐛 to $REPO/issues${ESC}${F_DEFAULT}"
+	echo -e "\n${F_RED}🛑 Unsupported OS \"$OS\" or architecture \"$ARCH\". Failed to install $PROG_NAME.${F_DEFAULT}"
+    echo -e "${B_RED}mPlease report 🐛 to $REPO/issues${F_DEFAULT}"
 	exit 1
 fi
 
 
-echo -e "\n🦈 ${ESC}${F_DEFAULT};${B_BLUE}m Started to download $PROG_NAME ${ESC}${B_DEFAULT};${F_DEFAULT}"
+echo -e "\n🦈 ${F_DEFAULT};${B_BLUE}m Started to download $PROG_NAME ${B_DEFAULT};${F_DEFAULT}"
 
 
 if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
     chmod +x $PWD/$EXE_NAME
-    echo -e "\n${ESC}${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${ESC}${F_DEFAULT}"
+    echo -e "\n${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${F_DEFAULT}"
 else
-    echo -e "\n${ESC}${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
+    echo -e "\n${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
   ⚠️  Check your internet connection.\n\
   ⚠️  Make sure 'curl' command is available.\n\
   ⚠️  Make sure there is no directory named '${EXE_NAME}' in ${PWD}\n\
-${ESC}${F_DEFAULT}"
-    echo -e "${ESC}${B_RED}mPlease report 🐛 to sm@keepersecurity.com${ESC}${F_DEFAULT}"
+${F_DEFAULT}"
+    echo -e "${B_RED}mPlease report 🐛 to sm@keepersecurity.com${F_DEFAULT}"
     exit 1
 fi
 
@@ -63,7 +63,7 @@ stty raw -echo ; answer=$(head -c 1) ; stty $old_stty_cfg
 if echo "$answer" | grep -iq "^y" ;then
     echo "$answer"
     sudo mv ./$EXE_NAME $INSTALL_PATH || exit 1
-    echo -e "${ESC}${F_GREEN}$PROG_NAME is installed into $INSTALL_PATH${ESC}${F_DEFAULT}\n"
+    echo -e "${F_GREEN}$PROG_NAME is installed into $INSTALL_PATH${F_DEFAULT}\n"
 
 	ls $ALIAS_PATH >> /dev/null 2>&1
 	if [ $? != 0 ] ; then
@@ -86,4 +86,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${ESC}${F_GREEN}✅ You can use the ${ESC}${F_DEFAULT};${B_LIGHT_BLUE}m $use_cmd ${ESC}${B_DEFAULT};${F_GREEN} command now.${ESC}${F_DEFAULT}m"
+echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT};${B_LIGHT_BLUE}m $use_cmd ${B_DEFAULT};${F_GREEN} command now.${F_DEFAULT}m"
