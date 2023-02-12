@@ -35,12 +35,12 @@ echo $SUPPORTED_PAIRS | grep -w -q "${OS}_${ARCH}"
 
 if [ $? != 0 ] ; then
 	echo -e "\n${F_RED}🛑 Unsupported OS \"$OS\" or architecture \"$ARCH\". Failed to install $PROG_NAME.${F_DEFAULT}"
-    echo -e "${B_RED}mPlease report 🐛 to $REPO/issues${F_DEFAULT}"
+    echo -e "${B_RED}Please report 🐛 to $REPO/issues${F_DEFAULT}"
 	exit 1
 fi
 
 
-echo -e "\n🦈 ${F_DEFAULT};${B_BLUE}m Started to download $PROG_NAME ${B_DEFAULT};${F_DEFAULT}"
+echo -e "\n🦈 ${F_DEFAULT};${B_BLUE} Started to download $PROG_NAME ${B_DEFAULT};${F_DEFAULT}"
 
 
 if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
@@ -52,7 +52,7 @@ else
   ⚠️  Make sure 'curl' command is available.\n\
   ⚠️  Make sure there is no directory named '${EXE_NAME}' in ${PWD}\n\
 ${F_DEFAULT}"
-    echo -e "${B_RED}mPlease report 🐛 to sm@keepersecurity.com${F_DEFAULT}"
+    echo -e "${B_RED}Please report 🐛 to sm@keepersecurity.com${F_DEFAULT}"
     exit 1
 fi
 
@@ -86,4 +86,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT};${B_LIGHT_BLUE}m $use_cmd ${B_DEFAULT};${F_GREEN} command now.${F_DEFAULT}m"
+echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT};${B_LIGHT_BLUE} $use_cmd ${B_DEFAULT};${F_GREEN} command now.${F_DEFAULT}"
