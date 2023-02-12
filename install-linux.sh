@@ -91,4 +91,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_LIGHT_BLUE} $use_cmd ${Color_Off}${F_GREEN} command now.${Color_Off}"
+echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_LIGHT_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
