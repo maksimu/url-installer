@@ -40,7 +40,7 @@ if [ $? != 0 ] ; then
 fi
 
 
-echo -e "\n🦈 ${F_DEFAULT};${B_BLUE} Started to download $PROG_NAME ${B_DEFAULT};${F_DEFAULT}"
+echo -e "\n🦈 ${B_BLUE} Started to download $PROG_NAME ${F_DEFAULT}"
 
 
 if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
@@ -86,4 +86,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT}${B_LIGHT_BLUE} $use_cmd ${B_DEFAULT};${F_GREEN} command now.${F_DEFAULT}"
+echo -e "${F_GREEN}✅ You can use the ${B_LIGHT_BLUE} $use_cmd ${F_GREEN} command now.${F_DEFAULT}"
