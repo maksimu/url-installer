@@ -1,7 +1,12 @@
 #!/bin/sh
 
+
+# Reset
+Color_Off='\033[0m'       # Text Reset
+
 # Colors
 ESC="\033["
+
 
 F_DEFAULT="${ESC}0;37m"   # Default white color
 F_RED="${ESC}0;31m"
@@ -86,4 +91,4 @@ else
 	use_cmd="./$EXE_NAME"
 fi
 
-echo -e "${F_GREEN}✅ You can use the ${B_LIGHT_BLUE} $use_cmd ${F_GREEN} command now.${F_DEFAULT}"
+echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_LIGHT_BLUE} $use_cmd ${Color_Off}${F_GREEN} command now.${Color_Off}"
