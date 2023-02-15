@@ -89,7 +89,7 @@ installLinux(){
 
   if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
       chmod +x $PWD/$EXE_NAME
-      echo -e "\n${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${F_DEFAULT}"
+      echo -e "\n⬇️ ${F_GREEN}$PROG_NAME is downloaded into $PWD/$EXE_NAME${F_DEFAULT}"
   else
       echo -e "\n${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
     ⚠️  Check your internet connection.\n\
