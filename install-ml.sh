@@ -60,7 +60,7 @@ installMac(){
 
   mkdir -p "${HOME}/.keeper"
 
-  echo -e "⛴${B_BLUE} => Downloading KSM CLI Installation package...${F_DEFAULT}";
+  echo -e "⛴${B_BLUE} => Downloading ${PROG_NAME} Installation package...${F_DEFAULT}";
 
   curl -H 'Cache-Control: no-cache' \
    "${LATEST_MAC_PKG}?$(date +%s)" \
@@ -74,9 +74,9 @@ installMac(){
 
   # Cleanup
   echo -e "🚜${B_BLUE} => Cleaning up temp files...${F_DEFAULT}"
-  rm -rf "$HOME/.keeper-gateway"
+  rm -rf "$HOME/.keeper"
 
-  echo -e "🚀${B_BLUE} => KSM was installed successfully.${F_DEFAULT}";
+  echo -e "🚀${B_BLUE} => ${PROG_NAME} was installed successfully.${F_DEFAULT}";
   echo "";
 
 
