@@ -94,8 +94,7 @@ installLinux(){
       echo -e "\n${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
     ⚠️  Check your internet connection.\n\
     ⚠️  Make sure 'curl' command is available.\n\
-    ⚠️  Make sure there is no directory named '${EXE_NAME}' in ${PWD}\n\
-  ${F_DEFAULT}"
+    ⚠️  Make sure there is no directory named '${EXE_NAME}' in ${PWD}\n ${F_DEFAULT}"
       echo -e "${B_RED}Please report 🐛 to sm@keepersecurity.com${F_DEFAULT}"
       exit 1
   fi
@@ -130,7 +129,7 @@ installLinux(){
   	use_cmd="./$EXE_NAME"
   fi
 
-  echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
+  echo -e "${F_GREEN}✅ You can use the ${F_DEFAULT}${B_BLUE}$use_cmd${F_DEFAULT}${F_GREEN} command now.${F_DEFAULT}"
 
 }
 
