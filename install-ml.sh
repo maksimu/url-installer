@@ -132,15 +132,15 @@ installLinux(){
 
   echo "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
 
-
-
 }
 
 if [[ $OSTYPE = 'darwin'* ]]; then
   installMac
-#  echo '💔 Not macOS. This script only works on macOS.'
-#  exit 1
+elif [[ $OSTYPE = 'linux'* ]]; then
+  installLinux
+else
+    echo '💔 Not supported OS.'
+    exit 1
 fi
-
 
 
