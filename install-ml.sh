@@ -87,7 +87,7 @@ installLinux(){
   echo "\n🦈 ${B_BLUE}Started to download $PROG_NAME ${F_DEFAULT}"
 
 
-  if curl -# --fail -Lo -H 'Cache-Control: no-cache' $EXE_NAME "${LATEST_LINUX_BIN}?$(date +%s)" ; then
+  if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
       chmod +x $PWD/$EXE_NAME
       echo "\n${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${F_DEFAULT}"
   else
@@ -142,5 +142,3 @@ else
     echo '💔 Not supported OS.'
     exit 1
 fi
-
-
