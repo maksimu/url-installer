@@ -89,29 +89,29 @@ installLinux(){
 
   if curl -# --fail -Lo $EXE_NAME "${LATEST_LINUX_BIN}" ; then
       chmod +x $PWD/$EXE_NAME
-      echo "\n${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${F_DEFAULT}"
+      echo -e "\n${F_GREEN}⬇️  $PROG_NAME is downloaded into $PWD/$EXE_NAME${F_DEFAULT}"
   else
-      echo "\n${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
+      echo -e "\n${F_RED}🛑 Couldn't download ${LATEST_LINUX_BIN}\n\
     ⚠️  Check your internet connection.\n\
     ⚠️  Make sure 'curl' command is available.\n\
     ⚠️  Make sure there is no directory named '${EXE_NAME}' in ${PWD}\n\
   ${F_DEFAULT}"
-      echo "${B_RED}Please report 🐛 to sm@keepersecurity.com${F_DEFAULT}"
+      echo -e "${B_RED}Please report 🐛 to sm@keepersecurity.com${F_DEFAULT}"
       exit 1
   fi
 
   use_cmd=$EXE_NAME
-  printf "Do you want to install system-wide into '${BIN_FOLDER}'? ${B_YELLOW}Requires sudo 😇 (y/N)${F_DEFAULT}? "
+  echo -e "Do you want to install system-wide into '${BIN_FOLDER}'? ${B_YELLOW}Requires sudo 😇 (y/N)${F_DEFAULT}? "
   old_stty_cfg=$(stty -g)
   stty raw -echo ; answer=$(head -c 1) ; stty $old_stty_cfg
   if echo "$answer" | grep -iq "^y" ;then
       echo "$answer"
       sudo mv ./$EXE_NAME $INSTALL_PATH || exit 1
-      echo "${F_GREEN}$PROG_NAME is installed into $INSTALL_PATH${F_DEFAULT}\n"
+      echo -e "${F_GREEN}$PROG_NAME is installed into $INSTALL_PATH${F_DEFAULT}\n"
 
   	ls $ALIAS_PATH >> /dev/null 2>&1
   	if [ $? != 0 ] ; then
-  		printf "Do you want to add '${ALIAS_NAME}' alias for ${PROG_NAME} ? (y/N)? "
+  		echo -e "Do you want to add '${ALIAS_NAME}' alias for ${PROG_NAME} ? (y/N)? "
   		old_stty_cfg=$(stty -g)
   		stty raw -echo ; answer=$(head -c 1) ; stty $old_stty_cfg
   		if echo "$answer" | grep -iq "^y" ; then
@@ -130,7 +130,7 @@ installLinux(){
   	use_cmd="./$EXE_NAME"
   fi
 
-  echo "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
+  echo -e "${Color_Off}${F_GREEN}✅ You can use the ${Color_Off}${B_BLUE}$use_cmd${Color_Off}${F_GREEN} command now.${Color_Off}"
 
 }
 
