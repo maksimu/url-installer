@@ -59,23 +59,21 @@ fi
 
 
 # Parse parameters
-while [[ $# -gt 0 ]]
-do
-key="$1"
+#while [[ $# -gt 0 ]]; do
+#
+#case $1 in
+#    -t|--token)
+#    TOKEN="$2"
+#    shift # past argument
+#    shift # past value
+#    ;;
+#    *)    # unknown option
+#    shift # past argument
+#    ;;
+#esac
+#done
 
-case $key in
-    -t|--token)
-    TOKEN="$2"
-    shift # past argument
-    shift # past value
-    ;;
-    *)    # unknown option
-    shift # past argument
-    ;;
-esac
-done
-
-echo "First argument: $1 d"
+echo "First argument: $1 a"
 echo "Second argument: $2"
 
 if [ -z "$TOKEN" ]; then
