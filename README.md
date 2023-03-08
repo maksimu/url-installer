@@ -3,5 +3,5 @@ Script will only execute on macOS and will require sudo permission to install KS
 
 Paste following script to into the Terminal window:
 ```shell
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/maksimu/url-installer/HEAD/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/maksimu/url-installer/HEAD/install.sh | bash -s -- --token AU:mEuTrqo1Z_nlmfyEWXEKjWi0cgYJm1Bx2QKE_tz0H8k
 ```
