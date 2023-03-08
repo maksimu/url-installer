@@ -57,9 +57,6 @@ if [ $? != 0 ] ; then
 	exit 1
 fi
 
-echo "First argument  : $1"
-echo "Second argument : $2"
-
 # Parse parameters
 while [[ $# -gt 0 ]]; do
 
@@ -77,12 +74,10 @@ done
 
 
 if [ -z "$TOKEN" ]; then
-  echo "Token parameter is not set."
+  echo "    Token parameter is not set."
 else
-  echo "Token parameter is set to $TOKEN."
+  echo "    Token parameter is set to $TOKEN."
 fi
-
-exit
 
 
 
@@ -112,7 +107,19 @@ installMac(){
   echo -e "🚜${B_BLUE} => Cleaning up downloaded package $macpkgfiledest ${F_DEFAULT}"
   rm -rf "$macpkgfiledest"
 
-  echo -e "🚀${F_GREEN} => You can use the ${F_DEFAULT}${B_BLUE}$ALIAS_NAME${F_DEFAULT}${F_GREEN} command now.${F_DEFAULT}"
+  if [ -z "$TOKEN" ]; then
+    echo "    Token parameter is not set."
+    echo -e "🚀${F_GREEN} => You can use the ${F_DEFAULT}${B_BLUE}$ALIAS_NAME${F_DEFAULT}${F_GREEN} command now.${F_DEFAULT}"
+  else
+    echo "    Token parameter is set to $TOKEN."
+    echo "    Initializing One-Time Token and creating config file (~/.keeper/gateway-config.json). Please wait..."
+    gateway ott-init --json "$TOKEN" > ~/.keeper/gateway-config.json
+
+    echo "    Starting Gateway. Please wait..."
+    gateway start -d
+  fi
+
+
 
   echo "";
 }
