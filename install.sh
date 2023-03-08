@@ -81,6 +81,7 @@ else
   echo "Token parameter is set to $TOKEN."
 fi
 
+exit 3
 
 
 
