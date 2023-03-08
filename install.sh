@@ -58,6 +58,32 @@ if [ $? != 0 ] ; then
 fi
 
 
+# Parse parameters
+while [[ $# -gt 0 ]]
+do
+key="$1"
+
+case $key in
+    -t|--token)
+    TOKEN="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    shift # past argument
+    ;;
+esac
+done
+
+if [ -z "$TOKEN" ]; then
+  echo "Token parameter is not set."
+else
+  echo "Token parameter is set to $TOKEN."
+fi
+
+
+
+
 installMac(){
   cd "$HOME"
 
@@ -173,7 +199,7 @@ EOF
 
 
 
-  if [ -z "$token" ]; then
+  if [ -z "$TOKEN" ]; then
     echo "    Token parameter is not set."
 
     read -p "Do you want to initialize and start the service right now with a one-time token? (yes/y or no/n) " choice
@@ -192,8 +218,8 @@ EOF
     fi
 
   else
-    echo "    Provided One-Time Token parameter is set to '$token'."
-    ONE_TIME_TOKEN_VAL=$token
+    echo "    Provided One-Time Token parameter is set to '$TOKEN'."
+    ONE_TIME_TOKEN_VAL=$TOKEN
   fi
 
 
