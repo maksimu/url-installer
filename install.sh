@@ -75,7 +75,7 @@ case $key in
 esac
 done
 
-echo "First argument: $1"
+echo "First argument: $1 d"
 echo "Second argument: $2"
 
 if [ -z "$TOKEN" ]; then
