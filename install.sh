@@ -57,24 +57,24 @@ if [ $? != 0 ] ; then
 	exit 1
 fi
 
-
-# Parse parameters
-#while [[ $# -gt 0 ]]; do
-#
-#case $1 in
-#    -t|--token)
-#    TOKEN="$2"
-#    shift # past argument
-#    shift # past value
-#    ;;
-#    *)    # unknown option
-#    shift # past argument
-#    ;;
-#esac
-#done
-
 echo "First argument: $1"
 echo "Second argument: $2"
+
+# Parse parameters
+while [[ $# -gt 0 ]]; do
+
+case $1 in
+    -t|--token)
+    TOKEN="$2"
+    shift # past argument
+    shift # past value
+    ;;
+    *)    # unknown option
+    shift # past argument
+    ;;
+esac
+done
+
 
 if [ -z "$TOKEN" ]; then
   echo "Token parameter is not set."
