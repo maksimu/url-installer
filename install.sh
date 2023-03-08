@@ -194,8 +194,10 @@ Type=simple
 ExecStart=${ALIAS_PATH} start -d --service --config-file $SERVICE_CONFIG_FILE_PATH
 User=$SERVICE_USERNAME
 Group=$SERVICE_USERNAME
-StandardOutput=file:$SERVICE_LOGS_FOLDER/service-out.log
-StandardError=file:$SERVICE_LOGS_FOLDER/service_error.log
+#StandardOutput=file:$SERVICE_LOGS_FOLDER/service-out.log
+StandardOutput=null
+#StandardError=file:$SERVICE_LOGS_FOLDER/service_error.log
+StandardError=null
 Restart=always
 
 [Install]
