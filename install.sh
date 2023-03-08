@@ -113,10 +113,10 @@ installMac(){
   else
     echo "    Token parameter is set to $TOKEN."
     echo "    Initializing One-Time Token and creating config file (~/.keeper/gateway-config.json). Please wait..."
-    gateway ott-init --json "$TOKEN" > ~/.keeper/gateway-config.json
+    $ALIAS_PATH ott-init --json "$TOKEN" > ~/.keeper/gateway-config.json
 
     echo "    Starting Gateway. Please wait..."
-    gateway start -d
+    $ALIAS_PATH start -d
   fi
 
 
@@ -217,12 +217,12 @@ EOF
       read -p "Please enter the one-time token: " ONE_TIME_TOKEN_VAL
     elif [[ "$choice" == "no" || "$choice" == "n" ]]; then
       echo "You can initialize the service later by running the command:
-      'gateway ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
+      '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     else
       echo "Invalid choice"
       echo "You can initialize the service later by running the command:
-      'gateway ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
+      '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     fi
 
@@ -233,7 +233,13 @@ EOF
 
 
   echo "    Initializing One-Time Token and creating config file ($SERVICE_CONFIG_FILE_PATH). Please wait..."
-  gateway ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH
+  $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH || {
+    echo "    Failed to initialize One-Time Token. Please check the token value and try again."
+    return 1
+  }
+
+
+  $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH
 
   echo "    Setting owner of the config file ($SERVICE_CONFIG_FOLDER) to $SERVICE_USERNAME"
   chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
