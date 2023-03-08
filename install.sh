@@ -57,8 +57,8 @@ if [ $? != 0 ] ; then
 	exit 1
 fi
 
-echo "First argument: $1"
-echo "Second argument: $2"
+echo "First argument  : $1"
+echo "Second argument : $2"
 
 # Parse parameters
 while [[ $# -gt 0 ]]; do
