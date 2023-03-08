@@ -73,10 +73,13 @@ esac
 done
 
 
+echo -e "📦${B_BLUE} => Installing $PROG_NAME...${F_DEFAULT}"
+
 if [ -z "$TOKEN" ]; then
+
   echo "    Token parameter is not set."
 else
-  echo "    Token parameter is set to $TOKEN."
+  echo "    Token parameter is set to $TOKEN"
 fi
 
 
@@ -207,6 +210,7 @@ EOF
   systemctl enable "${SERVICE_NAME}"
 
 
+  ONE_TIME_TOKEN_VAL=""
 
   if [ -z "$TOKEN" ]; then
     echo "    Token parameter is not set."
@@ -227,19 +231,16 @@ EOF
     fi
 
   else
-    echo "    Provided One-Time Token parameter is set to '$TOKEN'."
+    echo "    Provided One-Time Token parameter is set to '$TOKEN'"
     ONE_TIME_TOKEN_VAL=$TOKEN
   fi
 
 
-  echo "    Initializing One-Time Token and creating config file ($SERVICE_CONFIG_FILE_PATH). Please wait..."
+  echo "    Initializing One-Time Token ($ONE_TIME_TOKEN_VAL) and creating config file ($SERVICE_CONFIG_FILE_PATH). Please wait..."
   $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH || {
     echo "    Failed to initialize One-Time Token. Please check the token value and try again."
     return 1
   }
-
-
-  $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH
 
   echo "    Setting owner of the config file ($SERVICE_CONFIG_FOLDER) to $SERVICE_USERNAME"
   chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
