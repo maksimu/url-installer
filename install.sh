@@ -167,7 +167,7 @@ installSystemctlService(){
   fi
 
 
-  if [ -d $SERVICE_CONFIG_FOLDER ]
+  if [ ! -d $SERVICE_CONFIG_FOLDER ]
   then
     echo "    Create directory to store config file with appropriate permissions ($SERVICE_CONFIG_FOLDER)"
     mkdir -p $SERVICE_CONFIG_FOLDER
