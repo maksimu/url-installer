@@ -75,6 +75,9 @@ case $key in
 esac
 done
 
+echo "First argument: $1"
+echo "Second argument: $2"
+
 if [ -z "$TOKEN" ]; then
   echo "Token parameter is not set."
 else
