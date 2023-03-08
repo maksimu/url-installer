@@ -135,13 +135,11 @@ installSystemctlService(){
   SERVICE_CONFIG_FILE_PATH="$SERVICE_CONFIG_FOLDER/gateway-config.json"
 
 
-
-
   # Check if systemctl is available
   if which systemctl >/dev/null; then
-    echo "    systemctl exists on this system and will be used to install $SERVICE_NAME."
+    echo -e "✅${F_GREEN} => systemctl exists on this system and will be used to install $SERVICE_NAME service${F_DEFAULT}"
   else
-    echo "    systemctl could not be found. $SERVICE_NAME will not be installed on this system."
+    echo -e "❗️${B_RED} => systemctl could not be found. $SERVICE_NAME will not be installed on this system${F_DEFAULT}"
     return 1
   fi
 
@@ -149,7 +147,7 @@ installSystemctlService(){
   # Check if user already exists
   if ! id -u {$SERVICE_USERNAME} &> /dev/null
   then
-      echo "    Create the user '$SERVICE_USERNAME' to run the service."
+      echo "    Create the user '$SERVICE_USERNAME' to run the service"
       adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
   else
       echo "    User $SERVICE_USERNAME already exists on this system. Skipping creation."
@@ -158,31 +156,32 @@ installSystemctlService(){
 
   if [ ! -d $SERVICE_LOGS_FOLDER ]
   then
-      echo "    Create directory to store Gateway logs with appropriate permissions ($SERVICE_LOGS_FOLDER)"
+      echo -e "✅${F_GREEN} => Create directory to store Gateway logs with appropriate permissions ($SERVICE_LOGS_FOLDER)${F_DEFAULT}"
       mkdir -p $SERVICE_LOGS_FOLDER
       chmod 700 $SERVICE_LOGS_FOLDER
       chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_LOGS_FOLDER
   else
-      echo "    Directory $SERVICE_LOGS_FOLDER already exists on this system."
+      echo -e "✅${F_GREEN} => Directory $SERVICE_LOGS_FOLDER already exists on this system${F_DEFAULT}"
   fi
 
 
   if [ ! -d $SERVICE_CONFIG_FOLDER ]
   then
-    echo "    Create directory to store config file with appropriate permissions ($SERVICE_CONFIG_FOLDER)"
+    echo -e "✅${F_GREEN} => Create directory to store config file with appropriate permissions ($SERVICE_CONFIG_FOLDER)${F_DEFAULT}"
     mkdir -p $SERVICE_CONFIG_FOLDER
     chmod 700 $SERVICE_CONFIG_FOLDER
     chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
   else
-      echo "    Directory $SERVICE_CONFIG_FOLDER already exists on this system."
+      echo "    "
+      echo -e "✅${F_GREEN} => Directory $SERVICE_CONFIG_FOLDER already exists on this system${F_DEFAULT}"
   fi
 
 
   if [ -f /etc/systemd/system/${SERVICE_NAME} ]
   then
-      echo "    Updating service unit file at /etc/systemd/system/${SERVICE_NAME}"
+      echo -e "✅${F_GREEN} => Updating service unit file at /etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   else
-      echo "    Creating service unit file at /etc/systemd/system/${SERVICE_NAME}"
+      echo -e "✅${F_GREEN} => Creating service unit file at /etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   fi
 
   tee >/etc/systemd/system/${SERVICE_NAME} << EOF
@@ -203,62 +202,63 @@ Restart=always
 WantedBy=multi-user.target
 EOF
 
-  echo "    Reloading systemd configuration"
+  echo -e "✅${F_GREEN} => Reloading systemd configuration ${F_DEFAULT}"
   systemctl daemon-reload
 
-  echo "    Enabling service to start automatically on boot"
+  echo -e "✅${F_GREEN} => Enabling service to start automatically on boot ${F_DEFAULT}"
   systemctl enable "${SERVICE_NAME}"
 
 
   ONE_TIME_TOKEN_VAL=""
 
   if [ -z "$TOKEN" ]; then
-    echo "    Token parameter is not set."
+    echo -e "✅${F_GREEN} => Token parameter is not set${F_DEFAULT}"
 
-    read -p "Do you want to initialize and start the service right now with a one-time token? (yes/y or no/n) " choice
+    read -p "   Do you want to initialize and start the service right now with a one-time token? (yes/y or no/n) " choice
 
     if [[ "$choice" == "yes" || "$choice" == "y" ]]; then
-      read -p "Please enter the one-time token: " ONE_TIME_TOKEN_VAL
+      read -p "   Please enter the one-time token: " ONE_TIME_TOKEN_VAL
     elif [[ "$choice" == "no" || "$choice" == "n" ]]; then
-      echo "You can initialize the service later by running the command:
+      echo "    You can initialize the service later by running the command:
       '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     else
-      echo "Invalid choice"
-      echo "You can initialize the service later by running the command:
+      echo "    Invalid choice"
+      echo "    You can initialize the service later by running the command:
       '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     fi
 
   else
-    echo "    Provided One-Time Token parameter is set to '$TOKEN'"
     ONE_TIME_TOKEN_VAL=$TOKEN
+    echo -e "✅${F_GREEN} => Provided One-Time Token parameter is set to '$ONE_TIME_TOKEN_VAL'${F_DEFAULT}"
   fi
 
 
-  echo "    Initializing One-Time Token ($ONE_TIME_TOKEN_VAL) and creating config file ($SERVICE_CONFIG_FILE_PATH). Please wait..."
+  echo -e "✅${F_GREEN} => Initializing One-Time Token ($ONE_TIME_TOKEN_VAL) and creating config file ($SERVICE_CONFIG_FILE_PATH). Please wait...${F_DEFAULT}"
   $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH || {
-    echo "    Failed to initialize One-Time Token. Please check the token value and try again."
+    echo "    "
+    echo -e "❗️${B_RED} => Failed to initialize One-Time Token. Please check the token value and try again ${F_DEFAULT}"
     return 1
   }
 
-  echo "    Setting owner of the config file ($SERVICE_CONFIG_FOLDER) to $SERVICE_USERNAME"
+  echo -e "✅${F_GREEN} => Setting owner of the config file ($SERVICE_CONFIG_FOLDER) to $SERVICE_USERNAME${F_DEFAULT}"
   chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
 
-  echo "    Starting service ${SERVICE_NAME}"
+  echo -e "✅${F_GREEN} => Starting service ${SERVICE_NAME}${F_DEFAULT}"
   systemctl start "${SERVICE_NAME}"
 
   if sudo systemctl is-active ${SERVICE_NAME} >/dev/null 2>&1 ; then
-    echo "    ${SERVICE_NAME} is running"
+    echo -e "✅${F_GREEN} => ${SERVICE_NAME} is running${F_DEFAULT}"
   else
-    echo "    ${SERVICE_NAME} is not running. For more details,
-    run command \"systemctl status ${SERVICE_NAME}\""
+    echo "    "
+    echo -e "✅${B_YELLOW} => ${SERVICE_NAME} is not running. For more details, run command \"systemctl status ${SERVICE_NAME}\"${F_DEFAULT}"
   fi
 
   echo ""
-  echo "    ---------------------------------------------------------------"
-  echo "    Config file location: $SERVICE_CONFIG_FILE_PATH"
-  echo "    Logs file location  : $SERVICE_LOGS_FOLDER"
+  echo -e "✅${B_BLUE} => ---------------------------------------------------------------${F_DEFAULT}"
+  echo -e "✅${B_BLUE} => Config file location: $SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
+  echo -e "✅${B_BLUE} => Logs file location  : $SERVICE_LOGS_FOLDER${F_DEFAULT}"
 
 }
 
