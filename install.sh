@@ -73,7 +73,7 @@ fi
 #esac
 #done
 
-echo "First argument: $1 a"
+echo "First argument: $1"
 echo "Second argument: $2"
 
 if [ -z "$TOKEN" ]; then
