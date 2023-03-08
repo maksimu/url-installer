@@ -139,9 +139,9 @@ installSystemctlService(){
 
   # Check if systemctl is available
   if which systemctl >/dev/null; then
-    echo "    systemctl exists on this system"
+    echo "    systemctl exists on this system and will be used to install $SERVICE_NAME."
   else
-    echo "    systemctl could not be found. $SERVICE_NAME will not be installed."
+    echo "    systemctl could not be found. $SERVICE_NAME will not be installed on this system."
     return 1
   fi
 
@@ -149,21 +149,21 @@ installSystemctlService(){
   # Check if user already exists
   if ! id -u {$SERVICE_USERNAME} &> /dev/null
   then
-      echo "    Create the user $SERVICE_USERNAME"
+      echo "    Create the user '$SERVICE_USERNAME' to run the service."
       adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
   else
-      echo "    User $SERVICE_USERNAME already exists."
+      echo "    User $SERVICE_USERNAME already exists on this system. Skipping creation."
   fi
 
 
-  if [ -d $SERVICE_LOGS_FOLDER ]
+  if [ ! -d $SERVICE_LOGS_FOLDER ]
   then
-      echo "    Create directory to store logs with appropriate permissions ($SERVICE_LOGS_FOLDER)"
+      echo "    Create directory to store Gateway logs with appropriate permissions ($SERVICE_LOGS_FOLDER)"
       mkdir -p $SERVICE_LOGS_FOLDER
       chmod 700 $SERVICE_LOGS_FOLDER
       chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_LOGS_FOLDER
   else
-      echo "    Directory $SERVICE_LOGS_FOLDER already exists."
+      echo "    Directory $SERVICE_LOGS_FOLDER already exists on this system."
   fi
 
 
@@ -174,7 +174,7 @@ installSystemctlService(){
     chmod 700 $SERVICE_CONFIG_FOLDER
     chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
   else
-      echo "    Directory $SERVICE_CONFIG_FOLDER already exists."
+      echo "    Directory $SERVICE_CONFIG_FOLDER already exists on this system."
   fi
 
 
