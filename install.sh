@@ -72,18 +72,6 @@ case $1 in
 esac
 done
 
-
-echo -e "📦${B_BLUE} => Installing $PROG_NAME...${F_DEFAULT}"
-
-if [ -z "$TOKEN" ]; then
-
-  echo "    Token parameter is not set."
-else
-  echo "    Token parameter is set to $TOKEN"
-fi
-
-
-
 installMac(){
   cd "$HOME"
 
@@ -104,7 +92,7 @@ installMac(){
       exit 1
   fi
 
-  sudo installer -verbose -pkg "$macpkgfiledest" -target /
+  installer -verbose -pkg "$macpkgfiledest" -target /
 
   # Cleanup
   echo -e "🚜${B_BLUE} => Cleaning up downloaded package $macpkgfiledest ${F_DEFAULT}"
@@ -122,9 +110,6 @@ installMac(){
     $ALIAS_PATH start -d
   fi
 
-
-
-  echo "";
 }
 
 
@@ -137,9 +122,9 @@ installLinuxService(){
 
   # Check if systemctl is available
   if which systemctl >/dev/null; then
-    echo -e "✅${F_GREEN} => systemctl exists on this system and will be used to install $SERVICE_NAME service${F_DEFAULT}"
+    echo -e "✅${F_GREEN} => systemctl exists on this system and will be used to install ${B_BLUE}$SERVICE_NAME${F_GREEN} service${F_DEFAULT}"
   else
-    echo -e "❗️${B_RED} => systemctl could not be found. $SERVICE_NAME will not be installed on this system${F_DEFAULT}"
+    echo -e "❗️${B_RED} => systemctl could not be found. ${B_BLUE}$SERVICE_NAME${B_RED} will not be installed on this system${F_DEFAULT}"
     return 1
   fi
 
@@ -147,41 +132,41 @@ installLinuxService(){
   # Check if user already exists
   if ! id -u {$SERVICE_USERNAME} &> /dev/null
   then
-      echo "    Create the user '$SERVICE_USERNAME' to run the service"
+      echo "Create the user $SERVICE_USERNAME to run the service"
       adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
   else
-      echo "    User $SERVICE_USERNAME already exists on this system. Skipping creation."
+      echo "✅${F_GREEN} => User ${B_BLUE}$SERVICE_USERNAME${F_GREEN} already exists on this system. Skipping creation${F_DEFAULT}"
   fi
 
 
   if [ ! -d $SERVICE_LOGS_FOLDER ]
   then
-      echo -e "✅${F_GREEN} => Create directory to store Gateway logs with appropriate permissions ($SERVICE_LOGS_FOLDER)${F_DEFAULT}"
+      echo -e "⚙️${F_GREEN} => Create directory to store Gateway logs with appropriate permissions ($SERVICE_LOGS_FOLDER)${F_DEFAULT}"
       mkdir -p $SERVICE_LOGS_FOLDER
       chmod 700 $SERVICE_LOGS_FOLDER
       chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_LOGS_FOLDER
   else
-      echo -e "✅${F_GREEN} => Directory $SERVICE_LOGS_FOLDER already exists on this system${F_DEFAULT}"
+      echo -e "✅${F_GREEN} => Directory ${B_BLUE}$SERVICE_LOGS_FOLDER${F_GREEN} already exists on this system${F_DEFAULT}"
   fi
 
 
   if [ ! -d $SERVICE_CONFIG_FOLDER ]
   then
-    echo -e "✅${F_GREEN} => Create directory to store config file with appropriate permissions ($SERVICE_CONFIG_FOLDER)${F_DEFAULT}"
+    echo -e "⚙️${F_GREEN} => Create directory to store config file with appropriate permissions ($SERVICE_CONFIG_FOLDER)${F_DEFAULT}"
     mkdir -p $SERVICE_CONFIG_FOLDER
     chmod 700 $SERVICE_CONFIG_FOLDER
     chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
   else
       echo "    "
-      echo -e "✅${F_GREEN} => Directory $SERVICE_CONFIG_FOLDER already exists on this system${F_DEFAULT}"
+      echo -e "✅${F_GREEN} => Directory ${B_BLUE}$SERVICE_CONFIG_FOLDER${F_GREEN} already exists on this system${F_DEFAULT}"
   fi
 
 
   if [ -f /etc/systemd/system/${SERVICE_NAME} ]
   then
-      echo -e "✅${F_GREEN} => Updating service unit file at /etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
+      echo -e "⚙️${F_GREEN} => Updating service unit file at ${B_BLUE}/etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   else
-      echo -e "✅${F_GREEN} => Creating service unit file at /etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
+      echo -e "⚙️${F_GREEN} => Creating service unit file at ${B_BLUE}/etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   fi
 
   tee >/etc/systemd/system/${SERVICE_NAME} << EOF
@@ -214,66 +199,64 @@ EOF
   # CHECK IF THE CONFIG FILE EXISTS
   if [ -f $SERVICE_CONFIG_FILE_PATH ]
   then
-    echo -e "✅${F_GREEN} => Config file already exists at $SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
-    read -p "   Do you want re-initialize the Gateway? (yes/y or no/n) " choice
-    if [[ "$choice" == "no" || "$choice" == "n" ]]; then
+    echo -e "✅${F_GREEN} => Config file already exists at ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
+
+    read -p "Do you want re-initialize the Gateway? (yes/y or no/n) " choice2
+    if [[ "$choice2" == "no" || "$choice2" == "n" ]]; then
         echo "    Skipping re-initialization of the Gateway."
         echo "    Restart the gateway service by running the command: systemctl start "${SERVICE_NAME}""
         return 1
     fi
   fi
 
-
   ONE_TIME_TOKEN_VAL=""
 
   if [ -z "$TOKEN" ]; then
     echo -e "✅${F_GREEN} => Token parameter is not set${F_DEFAULT}"
 
-    read -p "   Do you want to initialize and start the service right now with a one-time token? (yes/y or no/n) " choice
+    read -p "Do you want to initialize and start the service right now with a one-time token? (yes/y or no/n) " choice3
 
-    if [[ "$choice" == "yes" || "$choice" == "y" ]]; then
-      read -p "   Please enter the one-time token: " ONE_TIME_TOKEN_VAL
-    elif [[ "$choice" == "no" || "$choice" == "n" ]]; then
-      echo "    You can initialize the service later by running the command:
-      '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
+    if [[ "$choice3" == "yes" || "$choice3" == "y" ]]; then
+      read -p "Please enter the one-time token: " ONE_TIME_TOKEN_VAL
+    elif [[ "$choice3" == "no" || "$choice3" == "n" ]]; then
+      echo "The service can be initialized later by running the command: '$ALIAS_PATH ott-init --json [ONE-TIME-TOKEN] > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     else
-      echo "    Invalid choice"
-      echo "    You can initialize the service later by running the command:
-      '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
+      echo "${B_YELLOW} => Invalid input.${F_DEFAULT}"
+      echo "${B_YELLOW} => The service can be initialized later by running the command: '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'${F_DEFAULT}"
       return 1
     fi
 
   else
     ONE_TIME_TOKEN_VAL=$TOKEN
-    echo -e "✅${F_GREEN} => Provided One-Time Token parameter is set to '$ONE_TIME_TOKEN_VAL'${F_DEFAULT}"
+    echo -e "✅${F_GREEN} => Provided One-Time Token parameter is set to ${B_BLUE}$ONE_TIME_TOKEN_VAL${F_DEFAULT}"
   fi
 
 
-  echo -e "✅${F_GREEN} => Initializing One-Time Token ($ONE_TIME_TOKEN_VAL) and creating config file ($SERVICE_CONFIG_FILE_PATH). Please wait...${F_DEFAULT}"
+  echo -e "✅${F_GREEN} => Initializing One-Time Token ${B_BLUE}$ONE_TIME_TOKEN_VAL${F_GREEN} and creating config file ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_GREEN}. Please wait...${F_DEFAULT}"
   $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH || {
     echo "    "
     echo -e "❗️${B_RED} => Failed to initialize One-Time Token. Please check the token value and try again ${F_DEFAULT}"
     return 1
   }
 
-  echo -e "✅${F_GREEN} => Setting owner of the config file ($SERVICE_CONFIG_FOLDER) to $SERVICE_USERNAME${F_DEFAULT}"
+  echo -e "✅${F_GREEN} => Setting owner of the config file ${B_BLUE}$SERVICE_CONFIG_FOLDER${F_GREEN} to ${B_BLUE}$SERVICE_USERNAME${F_DEFAULT}"
   chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
 
-  echo -e "✅${F_GREEN} => Starting service ${SERVICE_NAME}${F_DEFAULT}"
-  systemctl start "${SERVICE_NAME}"
+  echo -e "✅${F_GREEN} => Starting service ${B_BLUE}${SERVICE_NAME}${F_DEFAULT}"
+  systemctl restart "${SERVICE_NAME}"
 
-  if sudo systemctl is-active ${SERVICE_NAME} >/dev/null 2>&1 ; then
-    echo -e "✅${F_GREEN} => ${SERVICE_NAME} is running${F_DEFAULT}"
+  if systemctl is-active ${SERVICE_NAME} >/dev/null 2>&1 ; then
+    echo -e "✅${F_GREEN} => ${B_BLUE}${SERVICE_NAME}${F_GREEN} is running${F_DEFAULT}"
   else
     echo "    "
-    echo -e "✅${B_YELLOW} => ${SERVICE_NAME} is not running. For more details, run command \"systemctl status ${SERVICE_NAME}\"${F_DEFAULT}"
+    echo -e "✅${B_YELLOW} => ${B_BLUE}${SERVICE_NAME}${B_YELLOW} is not running. For more details, run command \"systemctl status ${SERVICE_NAME}\"${F_DEFAULT}"
   fi
 
   echo ""
-  echo -e "✅${B_BLUE} => ---------------------------------------------------------------${F_DEFAULT}"
-  echo -e "✅${B_BLUE} => Config file location: $SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
-  echo -e "✅${B_BLUE} => Logs file location  : $SERVICE_LOGS_FOLDER${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => ---------------------------------------------------------------${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => Config file location: ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
+  echo -e "✅${B_BLUE} => Logs file location  : ${B_BLUE}$SERVICE_LOGS_FOLDER${F_DEFAULT}"
 
 }
 
@@ -300,10 +283,10 @@ installLinux(){
     exit 1
   fi
 
-  sudo mv ./$EXE_NAME ${INSTALL_PATH} || exit 1
-  echo -e "✅${F_GREEN} => ${PROG_NAME} is installed into ${B_BLUE}${INSTALL_PATH}${F_DEFAULT}"
+  mv ./$EXE_NAME ${INSTALL_PATH} || exit 1
+  echo -e "${F_GREEN} => ${PROG_NAME} is installed into ${B_BLUE}${INSTALL_PATH}${F_DEFAULT}"
 
-  sudo ln -sf ${INSTALL_PATH} ${ALIAS_PATH}
+  ln -sf ${INSTALL_PATH} ${ALIAS_PATH}
   echo -e "✅${F_GREEN} => Added system-wide alias ${F_DEFAULT}${B_BLUE}$ALIAS_NAME${F_DEFAULT}${F_GREEN}${F_DEFAULT}"
 
 }
@@ -313,6 +296,7 @@ if [[ $OSTYPE = 'darwin'* ]]; then
 elif [[ $OSTYPE = 'linux'* ]]; then
   installLinux
   installLinuxService
+  echo -f "${PROG_NAME} is installed and service configured successfully"
 else
     echo -e "💔${B_RED} => ${OSTYPE} is not supported${F_DEFAULT}"
     exit 1
