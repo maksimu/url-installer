@@ -256,7 +256,7 @@ EOF
   echo ""
   echo -e "✅${F_BLUE} => ---------------------------------------------------------------${F_DEFAULT}"
   echo -e "✅${F_BLUE} => Config file location: ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
-  echo -e "✅${B_BLUE} => Logs file location  : ${B_BLUE}$SERVICE_LOGS_FOLDER${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => Logs file location  : ${B_BLUE}$SERVICE_LOGS_FOLDER${F_DEFAULT}"
 
 }
 
@@ -296,7 +296,7 @@ if [[ $OSTYPE = 'darwin'* ]]; then
 elif [[ $OSTYPE = 'linux'* ]]; then
   installLinux
   installLinuxService
-  echo -f "${PROG_NAME} is installed and service configured successfully"
+  echo -e "${PROG_NAME} is installed and service configured successfully"
 else
     echo -e "💔${B_RED} => ${OSTYPE} is not supported${F_DEFAULT}"
     exit 1
