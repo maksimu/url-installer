@@ -212,7 +212,7 @@ EOF
   ONE_TIME_TOKEN_VAL=""
 
   if [ -z "$TOKEN" ]; then
-    echo -e "✅${F_GREEN} => Token parameter is not set${F_DEFAULT}"
+    echo -e "=> Token parameter is not set."
 
     read -p "Do you want to initialize and start the service right now with a one-time token? (yes/y or no/n) " choice3
 
@@ -222,8 +222,8 @@ EOF
       echo "The service can be initialized later by running the command: '$ALIAS_PATH ott-init --json [ONE-TIME-TOKEN] > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     else
-      echo "${B_YELLOW} => Invalid input.${F_DEFAULT}"
-      echo "${B_YELLOW} => The service can be initialized later by running the command: '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'${F_DEFAULT}"
+      echo "=> Invalid input"
+      echo "=> The service can be initialized later by running the command: '$ALIAS_PATH ott-init --json $ONE_TIME_TOKEN_VAL > $SERVICE_CONFIG_FILE_PATH'"
       return 1
     fi
 
