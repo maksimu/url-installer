@@ -128,7 +128,7 @@ installMac(){
 }
 
 
-installSystemctlService(){
+installLinuxService(){
   SERVICE_USERNAME="keeper-gateway-service"
   SERVICE_LOGS_FOLDER="/var/log/keeper-gateway"
   SERVICE_CONFIG_FOLDER="/etc/keeper-gateway"
@@ -209,6 +209,19 @@ EOF
 
   echo -e "✅${F_GREEN} => Enabling service to start automatically on boot ${F_DEFAULT}"
   systemctl enable "${SERVICE_NAME}"
+
+
+  # CHECK IF THE CONFIG FILE EXISTS
+  if [ -f $SERVICE_CONFIG_FILE_PATH ]
+  then
+    echo -e "✅${F_GREEN} => Config file already exists at $SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
+    read -p "   Do you want re-initialize the Gateway? (yes/y or no/n) " choice
+    if [[ "$choice" == "no" || "$choice" == "n" ]]; then
+        echo "    Skipping re-initialization of the Gateway."
+        echo "    Restart the gateway service by running the command: systemctl start "${SERVICE_NAME}""
+        return 1
+    fi
+  fi
 
 
   ONE_TIME_TOKEN_VAL=""
@@ -299,7 +312,7 @@ if [[ $OSTYPE = 'darwin'* ]]; then
   installMac
 elif [[ $OSTYPE = 'linux'* ]]; then
   installLinux
-  installSystemctlService
+  installLinuxService
 else
     echo -e "💔${B_RED} => ${OSTYPE} is not supported${F_DEFAULT}"
     exit 1
