@@ -255,8 +255,11 @@ EOF
 
   echo ""
   echo -e "✅${F_BLUE} => ---------------------------------------------------------------${F_DEFAULT}"
-  echo -e "✅${F_BLUE} => Config file location: ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
-  echo -e "✅${F_BLUE} => Logs file location  : ${B_BLUE}$SERVICE_LOGS_FOLDER${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => Config file          : ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => Logs file            : ${B_BLUE}$SERVICE_LOGS_FOLDER${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => View Service Status  : ${B_BLUE}systemctl status "${SERVICE_NAME}"${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => Restart Service      : ${B_BLUE}systemctl restart "${SERVICE_NAME}"${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => Stop Service         : ${B_BLUE}systemctl stop "${SERVICE_NAME}"${F_DEFAULT}"
 
 }
 
