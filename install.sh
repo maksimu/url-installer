@@ -133,7 +133,7 @@ installLinuxService(){
   if ! id -u {$SERVICE_USERNAME} &> /dev/null
   then
       echo "Create the user $SERVICE_USERNAME to run the service"
-      adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
+      sudo adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
   else
       echo "✅${F_GREEN} => User ${B_BLUE}$SERVICE_USERNAME${F_GREEN} already exists on this system. Skipping creation${F_DEFAULT}"
   fi
@@ -142,9 +142,9 @@ installLinuxService(){
   if [ ! -d $SERVICE_LOGS_FOLDER ]
   then
       echo -e "⚙️${F_GREEN} => Create directory to store Gateway logs with appropriate permissions ($SERVICE_LOGS_FOLDER)${F_DEFAULT}"
-      mkdir -p $SERVICE_LOGS_FOLDER
-      chmod 700 $SERVICE_LOGS_FOLDER
-      chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_LOGS_FOLDER
+      sudo mkdir -p $SERVICE_LOGS_FOLDER
+      sudo chmod 700 $SERVICE_LOGS_FOLDER
+      sudo chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_LOGS_FOLDER
   else
       echo -e "✅${F_GREEN} => Directory ${B_BLUE}$SERVICE_LOGS_FOLDER${F_GREEN} already exists on this system${F_DEFAULT}"
   fi
@@ -153,9 +153,9 @@ installLinuxService(){
   if [ ! -d $SERVICE_CONFIG_FOLDER ]
   then
     echo -e "⚙️${F_GREEN} => Create directory to store config file with appropriate permissions ($SERVICE_CONFIG_FOLDER)${F_DEFAULT}"
-    mkdir -p $SERVICE_CONFIG_FOLDER
-    chmod 700 $SERVICE_CONFIG_FOLDER
-    chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
+    sudo mkdir -p $SERVICE_CONFIG_FOLDER
+    sudo chmod 700 $SERVICE_CONFIG_FOLDER
+    sudo chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
   else
       echo "    "
       echo -e "✅${F_GREEN} => Directory ${B_BLUE}$SERVICE_CONFIG_FOLDER${F_GREEN} already exists on this system${F_DEFAULT}"
@@ -169,7 +169,7 @@ installLinuxService(){
       echo -e "⚙️${F_GREEN} => Creating service unit file at ${B_BLUE}/etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   fi
 
-  tee >/etc/systemd/system/${SERVICE_NAME} << EOF
+  sudo tee >/etc/systemd/system/${SERVICE_NAME} << EOF
 [Unit]
 Description=${PROG_NAME} Service
 After=network.target
@@ -190,10 +190,10 @@ WantedBy=multi-user.target
 EOF
 
   echo -e "✅${F_GREEN} => Reloading systemd configuration ${F_DEFAULT}"
-  systemctl daemon-reload
+  sudo systemctl daemon-reload
 
   echo -e "✅${F_GREEN} => Enabling service to start automatically on boot ${F_DEFAULT}"
-  systemctl enable "${SERVICE_NAME}"
+  sudo systemctl enable "${SERVICE_NAME}"
 
 
   # CHECK IF THE CONFIG FILE EXISTS
@@ -234,19 +234,19 @@ EOF
 
 
   echo -e "✅${F_GREEN} => Initializing One-Time Token ${B_BLUE}$ONE_TIME_TOKEN_VAL${F_GREEN} and creating config file ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_GREEN}. Please wait...${F_DEFAULT}"
-  $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH || {
+  sudo $ALIAS_PATH ott-init --json "$ONE_TIME_TOKEN_VAL" > $SERVICE_CONFIG_FILE_PATH || {
     echo "    "
     echo -e "❗️${B_RED} => Failed to initialize One-Time Token. Please check the token value and try again ${F_DEFAULT}"
     return 1
   }
 
   echo -e "✅${F_GREEN} => Setting owner of the config file ${B_BLUE}$SERVICE_CONFIG_FOLDER${F_GREEN} to ${B_BLUE}$SERVICE_USERNAME${F_DEFAULT}"
-  chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
+  sudo chown "$SERVICE_USERNAME":"$SERVICE_USERNAME" $SERVICE_CONFIG_FOLDER
 
   echo -e "✅${F_GREEN} => Starting service ${B_BLUE}${SERVICE_NAME}${F_DEFAULT}"
-  systemctl restart "${SERVICE_NAME}"
+  sudo systemctl restart "${SERVICE_NAME}"
 
-  if systemctl is-active ${SERVICE_NAME} >/dev/null 2>&1 ; then
+  if sudo systemctl is-active ${SERVICE_NAME} >/dev/null 2>&1 ; then
     echo -e "✅${F_GREEN} => ${B_BLUE}${SERVICE_NAME}${F_GREEN} is running${F_DEFAULT}"
   else
     echo "    "
@@ -267,7 +267,7 @@ installLinux(){
 
 
   if curl -# --fail -Lo ${EXE_NAME} "${LATEST_LINUX_BIN}" ; then
-      chmod +x ${PWD}/${EXE_NAME}
+      sudo chmod +x ${PWD}/${EXE_NAME}
       echo -e "\n✅${F_GREEN} => $PROG_NAME is downloaded into ${B_BLUE}${PWD}/${EXE_NAME}${F_DEFAULT}"
   else
       echo -e "\n🛑${F_RED} => Couldn't download ${LATEST_LINUX_BIN}\n\
@@ -285,13 +285,24 @@ installLinux(){
     exit 1
   fi
 
-  mv ./$EXE_NAME ${INSTALL_PATH} || exit 1
+  sudo mv ./$EXE_NAME ${INSTALL_PATH} || exit 1
   echo -e "${F_GREEN} => ${PROG_NAME} is installed into ${B_BLUE}${INSTALL_PATH}${F_DEFAULT}"
 
-  ln -sf ${INSTALL_PATH} ${ALIAS_PATH}
+  sudo ln -sf ${INSTALL_PATH} ${ALIAS_PATH}
   echo -e "✅${F_GREEN} => Added system-wide alias ${F_DEFAULT}${B_BLUE}$ALIAS_NAME${F_DEFAULT}${F_GREEN}${F_DEFAULT}"
 
 }
+
+
+# Request sudo permissions and cache credentials
+sudo -v
+
+# Check if sudo authentication was successful
+if [ $? -ne 0 ]; then
+    echo "This script requires sudo privileges to run. Sudo authentication failed. Aborting script."
+    exit 1
+fi
+
 
 if [[ $OSTYPE = 'darwin'* ]]; then
   installMac
