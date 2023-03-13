@@ -143,7 +143,7 @@ installLinuxService(){
   then
       echo "Create the user $SERVICE_USERNAME to run the service"
       sudo useradd -s /sbin/nologin --no-create-home "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
-  change adduser to useradd
+
       if id "$SERVICE_USERNAME" >/dev/null 2>&1; then
           echo "User $SERVICE_USERNAME was created successfully."
       else
