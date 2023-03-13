@@ -142,7 +142,7 @@ installLinuxService(){
   if ! id -u {$SERVICE_USERNAME} &> /dev/null
   then
       echo "Create the user $SERVICE_USERNAME to run the service"
-      sudo adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
+      sudo useradd -s /sbin/nologin --no-create-home "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
   change adduser to useradd
       if id "$SERVICE_USERNAME" >/dev/null 2>&1; then
           echo "User $SERVICE_USERNAME was created successfully."
@@ -185,7 +185,7 @@ installLinuxService(){
       echo -e "⚙️${F_GREEN} => Creating service unit file at ${B_BLUE}/etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   fi
 
-  sudo tee /etc/systemd/system/${SERVICE_NAME} << EOF
+  sudo tee >/dev/null /etc/systemd/system/${SERVICE_NAME} << EOF
 [Unit]
 Description=${PROG_NAME} Service
 After=network.target
