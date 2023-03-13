@@ -143,6 +143,13 @@ installLinuxService(){
   then
       echo "Create the user $SERVICE_USERNAME to run the service"
       sudo adduser --disabled-password --gecos "" "$SERVICE_USERNAME" >/dev/null 2>/dev/tty
+  change adduser to useradd
+      if id "$SERVICE_USERNAME" >/dev/null 2>&1; then
+          echo "User $SERVICE_USERNAME was created successfully."
+      else
+          echo "User $SERVICE_USERNAME was not created. This script requires service user to start the service correctly."
+          exit 1
+      fi
   else
       echo "✅${F_GREEN} => User ${B_BLUE}$SERVICE_USERNAME${F_GREEN} already exists on this system. Skipping creation${F_DEFAULT}"
   fi
@@ -178,7 +185,7 @@ installLinuxService(){
       echo -e "⚙️${F_GREEN} => Creating service unit file at ${B_BLUE}/etc/systemd/system/${SERVICE_NAME}${F_DEFAULT}"
   fi
 
-  sudo tee >/etc/systemd/system/${SERVICE_NAME} << EOF
+  sudo tee /etc/systemd/system/${SERVICE_NAME} << EOF
 [Unit]
 Description=${PROG_NAME} Service
 After=network.target
