@@ -75,6 +75,15 @@ done
 installMac(){
   cd "$HOME"
 
+  echo -e "Check if ${PROG_NAME} process is already running"
+
+  if pgrep "gateway" >/dev/null 2>&1 ; then
+      echo "${PROG_NAME} is currently running. Please stop it and try again."
+      exit 1
+  else
+      echo "${PROG_NAME} is not running. Proceeding with installation."
+  fi
+
   macpkgfiledest="${HOME}/.keeper/${EXE_NAME}.pkg"
 
   mkdir -p "${HOME}/.keeper"
@@ -254,9 +263,10 @@ EOF
   fi
 
   echo ""
-  echo -e "✅${F_BLUE} => ---------------------------------------------------------------${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => ---: Files :----------------------------------------------------------${F_DEFAULT}"
   echo -e "✅${F_BLUE} => Config file          : ${B_BLUE}$SERVICE_CONFIG_FILE_PATH${F_DEFAULT}"
   echo -e "✅${F_BLUE} => Logs files           : ${B_BLUE}$SERVICE_LOGS_FOLDER${F_DEFAULT}"
+  echo -e "✅${F_BLUE} => ---: Commands :----------------------------------------------------------${F_DEFAULT}"
   echo -e "✅${F_BLUE} => View Service Status  : ${B_BLUE}systemctl status ${SERVICE_NAME}${F_DEFAULT}"
   echo -e "✅${F_BLUE} => Restart Service      : ${B_BLUE}systemctl restart ${SERVICE_NAME}${F_DEFAULT}"
   echo -e "✅${F_BLUE} => Stop Service         : ${B_BLUE}systemctl stop ${SERVICE_NAME}${F_DEFAULT}"
@@ -301,6 +311,12 @@ sudo -v
 if [ $? -ne 0 ]; then
     echo "This script requires sudo privileges to run. Sudo authentication failed. Aborting script."
     exit 1
+fi
+
+# Check if sudo access is available
+if ! sudo -v; then
+  echo "Error: you must have sudo access to run this script." >&2
+  exit 1
 fi
 
 
